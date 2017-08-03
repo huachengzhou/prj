@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.blake.dao.EmployeeDAO">
+    
+    <!-- 添加员工信息的方法 -->
+    <insert id="addEmployee" parameterType="com.blake.bean.Employee">
+        insert into tb_employee(employeeName,employeeSex,employeeBirth,employeePhone,employeePlace,joinTime,password,isLead) value(
+        #{employeeName},#{employeeSex},#{employeeBirth},#{employeePhone},#{employeePlace},#{joinTime},#{password},#{isLead})
+    </insert>
+    
+    <!-- 修改员工信息的方法 -->
+    <update id="updateEmployee" parameterType="com.blake.bean.Employee">
+    update tb_employee set employeeName=#{employeeName},employeeSex=#{employeeSex},employeeBirth=#{employeeBirth},employeePhone=#{employeePhone},
+    employeePlace=#{employeePlace},joinTime=#{joinTime},password=#{password},isLead=#{isLead} where employeeID=#{employeeID}
+    </update>
+    
+    <!-- 根据id查找Employee -->
+    <select id="findEmployeeById" parameterType="int" resultType="com.blake.bean.Employee">
+        select * from tb_employee where employeeID=#{employeeID}
+    </select>
+    
+    <!-- 删除员工 -->
+    <delete id="deleteEmployee" parameterType="int">
+        delete from tb_employee where employeeID=#{employeeID}
+    </delete>
+    
+    <select id="findAllEmployee" resultType="com.blake.bean.Employee">
+        select * from tb_employee
+    </select>
+	
+</mapper>
+
+

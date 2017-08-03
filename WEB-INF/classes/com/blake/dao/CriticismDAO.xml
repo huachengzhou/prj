@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.blake.dao.CriticismDAO">
+    
+    <!-- 添加批复 -->
+    <insert id="addCriticism" parameterType="com.blake.bean.Criticism">
+        insert into tb_criticism(criticismContent,employeeID,criticismTime,messageID) value(
+        #{criticismContent},#{employee.employeeID},#{criticismTime},#{message.messageID})
+    </insert>
+    
+    
+    <!-- 按文章ID查找批复 -->
+    <select id="findCriticismByMsgID" parameterType="int" resultType="com.blake.bean.Criticism">
+       select * from tb_criticism where criticismID=#{criticismID}
+        <!-- select * from tb_criticism where messageID=#{messageID}
+        select * from tb_criticism where criticismID=#{criticismID}
+         -->
+    </select>
+    
+	
+</mapper>
+
+

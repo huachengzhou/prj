@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.blake.dao.MessageDAO">
+    
+    <!-- 添加消息的方法 -->
+    <insert id="addMessage" parameterType="com.blake.bean.Message">
+        insert into tb_message(messageTitle,messageContent,employeeID,publishTime) value(
+        #{messageTitle},#{messageContent},#{employee.employeeID},#{publishTime})
+    </insert>
+    
+    <!-- 修改消息的方法 -->
+    <update id="updateMessage" parameterType="com.blake.bean.Message">
+    update tb_message set messageTitle=#{messageTitle},messageContent=#{messageContent},employeeID=#{employee.employeeID},
+    publishTime=#{publishTime} where messageID=#{messageID}
+    </update>
+    
+    <!-- 按ID查询消息的方法 -->
+    <select id="findMessageById" parameterType="int" resultType="com.blake.bean.Message">
+        select * from tb_message where messageID=#{messageID}
+    </select>
+    
+    <!-- 删除消息的方法 -->
+    <delete id="deleteMessage" parameterType="int">
+        delete from tb_message where messageID=#{messageID}
+    </delete>
+    
+    <!-- 查询消息记录数 -->
+    <select id="findAllCount" resultType="int">
+        select count(*) from tb_message
+    </select>
+    
+    <!-- 按分页信息查询所有消息的方法    select * from tb_message  order by publishTime desc limit 1,2; -->
+    <select id="findAllMessagee" parameterType="com.blake.util.Page" resultType="com.blake.bean.Message">
+        select messageID,messageTitle,messageContent,employeeID,publishTime
+         from tb_message  order by publishTime desc limit #{beginIndex},#{everyPage}
+    </select>
+	<!-- 
+	
+
+	select messageID,messageTitle,messageContent,employeeID,publishTime,employeeID,
+	employeeName,employeeSex,employeeBirth,employeePhone,employeePlace,joinTime,password,isLead
+	 from tb_message,tb_employee where tb_message.employeeID = tb_employee.employeeID order by publishTime desc limit 1,2;
+	 -->
+</mapper>
+
+

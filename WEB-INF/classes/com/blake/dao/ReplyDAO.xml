@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.blake.dao.ReplyDAO">
+    
+    <!-- 添加回复 -->
+    <insert id="addReplay" parameterType="com.blake.bean.Reply">
+        insert into tb_reply(replyContent,employeeID,replyTime,messageID) value(
+        #{replyContent},#{employee.employeeID},#{replyTime},#{message.messageID})
+    </insert>
+    
+    
+    <!-- 查询消息记录数 -->
+    <select id="findCountByMsgID" parameterType="com.blake.bean.Message" resultType="int">
+    <!-- select count(*) from tb_message,tb_reply where tb_reply.messageID=tb_message.messageID; -->
+       select count(*) from tb_reply where messageID=#{messageID}
+    </select>
+    
+    <!-- 按文章ID查找回复  select * from tb_reply where messageID=14 limit 1,2;-->
+    <select id="findReplayByMsgID"  resultType="com.blake.bean.Reply">
+    select * from tb_reply where messageID=#{message.messageID} limit #{page.beginIndex},#{page.everyPage}
+    </select>
+</mapper>
+
+

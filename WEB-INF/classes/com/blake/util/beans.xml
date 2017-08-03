@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+    <!-- 加入静态资源 -->
+    <context:property-placeholder location="classpath:db.properties"/>
+    <!-- 自动扫描组件包 -->
+    <context:component-scan base-package="com.blake"/>
+    <!-- mybatis:scan会扫描org.fkit.dao包里的所有接口当作Spring的bean配置，之后可以进行依赖注入-->
+    <mybatis-spring:scan base-package="com.blake.dao"/>
+    <!-- 配置c3p0数据源 -->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="user" value="${jdbc.user}"></property>
+        <property name="password" value="${jdbc.password}"></property>
+        <property name="jdbcUrl" value="${jdbc.Url}"></property>
+        <property name="driverClass" value="${jdbc.driver}"></property>
+        <property name="maxPoolSize" value="${jdbc.maxPoolSize}"></property>
+        <property name="minPoolSize" value="${jdbc.minPoolSize}"></property>
+        <property name="maxIdleTime" value="${jdbc.maxIdleTime}"></property>
+        <property name="initialPoolSize" value="${jdbc.initialPoolSize}"></property>
+    </bean>
+    <!-- 配置SqlSessionFactory，org.mybatis.spring.SqlSessionFactoryBean是Mybatis社区开发用于整合Spring的bean -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"></property>
+        <property name="configLocation" value="classpath:com/blake/util/SqlMapConfig.xml"></property>
+    </bean>
+    <!-- 自动扫描包 mapper interface -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.blake.dao"></property>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+    </bean>
+    <!-- JDBC事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+    <!-- 启用注解的方式开启事务 -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    
+</beans>
